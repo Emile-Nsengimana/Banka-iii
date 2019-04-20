@@ -1,0 +1,39 @@
+{
+  "name": "banka-iii",
+  "version": "1.0.0",
+  "description": "Banka is a light-weight core banking application that powers banking operations like account creation, customer deposit and withdrawals",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Emile-Nsengimana/Banka-iii.git"
+  },
+  "author": "Emile Nsengimana",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Emile-Nsengimana/Banka-iii/issues"
+  },
+  "homepage": "https://github.com/Emile-Nsengimana/Banka-iii#readme",
+  "dependencies": {
+    "babel": "^6.23.0",
+    "babel-cli": "^6.26.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-register": "^6.26.0",
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.1",
+    "dotenv": "^7.0.0",
+    "express": "^4.16.4",
+    "mocha": "^6.1.4",
+    "nodemon": "^1.18.11",
+    "pg": "^7.10.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.17.2"
+  }
+}
