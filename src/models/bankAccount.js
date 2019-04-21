@@ -1,30 +1,38 @@
 const bankAccountTable = `
 CREATE TABLE IF NOT EXISTS
  bankAccount (
-        accountId varchar(50) primary key,
-        accountNumber varchar(30) NOT NULL,
+        accountId serial primary key,
+        accountNumber varchar(50) NOT NULL,
         createdOn date NOT NULL,
-        owner integer UNIQUE,
+        owner integer,
         type varchar(10) NOT NULL,
         status varchar(10),
-        balance boolean DEFAULT false,
+        balance float,
         foreign key(owner) REFERENCES users
     )`;
-const createAccount = `insert into users (
-        accountId,
+const createAccount = `insert into bankAccount (
         accountNumber,
         createdOn,
         owner,
         type,
         status,
         balance
-    )VALUES($1,$2,$3,$4,$5,$6,$7) ON CONFLICT DO NOTHING returning *`;
+    )VALUES($1,$2,$3,$4,$5,$6) ON CONFLICT DO NOTHING returning *`;
 
 const removeAccount = 'delete from bankAccount where accountNumber = ($1)';
 const searchAccount = 'select * from bankAccount where accountNumber = ($1)';
+const changeAccountStatus = 'update bankaccount set status = ($1) where accountnumber = ($2)';
+const deleteAccount = 'delete from bankaccount where accountnumber = ($1)';
+const getAllAccount = 'select * from bankaccount';
+const updateAccount = 'update bankaccount set balance = ($1) where accountnumber = ($2)';
+
 export default {
   bankAccountTable,
   createAccount,
   removeAccount,
   searchAccount,
+  changeAccountStatus,
+  deleteAccount,
+  getAllAccount,
+  updateAccount,
 };
