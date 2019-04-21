@@ -66,7 +66,21 @@ class accountController {
   // ================================== SEARCH ACCOUNT =================================
   static async searchAccount(req, res) {
     const getAccount = await search.searchAccount(req.params.accountNo);
-    if (getAccount.rowCount !== 0) return res.status(200).json({ status: 200, data: getAccount.rows[0] });
+    const getOwner = await search.searchUserById(getAccount.rows[0].owner);
+    if (getAccount.rowCount !== 0) {
+      return res.status(200).json({
+        status: 200,
+        data: {
+          accountId: getAccount.rows[0].accountid,
+          accountNo: getAccount.rows[0].accountno,
+          createdOn: getAccount.rows[0].createdon,
+          ownerEmail: getOwner.rows[0].email,
+          type: getAccount.rows[0].type,
+          status: getAccount.rows[0].status,
+          balance: getAccount.rows[0].balance,
+        },
+      });
+    }
     return res.status(404).json({ status: 404, message: 'account not found' });
   }
 
