@@ -25,6 +25,7 @@ const changeAccountStatus = 'update bankaccount set status = ($1) where accountn
 const deleteAccount = 'delete from bankaccount where accountnumber = ($1)';
 const getAllAccount = 'select * from bankaccount';
 const updateAccount = 'update bankaccount set balance = ($1) where accountnumber = ($2)';
+const accountStatus = 'select * from bankaccount where status = ($1)';
 
 export default {
   bankAccountTable,
@@ -35,4 +36,5 @@ export default {
   deleteAccount,
   getAllAccount,
   updateAccount,
+  accountStatus,
 };
