@@ -69,5 +69,12 @@ class accountController {
     if (getAccount.rowCount !== 0) return res.status(200).json({ status: 200, data: getAccount.rows[0] });
     return res.status(404).json({ status: 404, message: 'account not found' });
   }
+
+  // ================================== DISPLAY ACCOUNTS BY STATUS ==============================
+  static async getAccountsByStatus(req, res) {
+    const accountsStatus = await con.query(account.accountStatus, [req.query.status]);
+    if (accountsStatus.rowCount !== 0) return res.status(200).json({ status: 200, data: accountsStatus.rows });
+    return res.status(401).json({ status: 404, message: `there is no account with status ${req.query.status}` });
+  }
 }
 export default accountController;
