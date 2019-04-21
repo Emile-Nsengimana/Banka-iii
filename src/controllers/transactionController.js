@@ -34,5 +34,16 @@ class transactionController {
       }
     } return res.status(404).json({ status: 404, error: 'account not found' });
   }
+
+  // ================================== DISPLAY ACCOUNTS TRANSACTION ==============================
+  static async getAccountsTransactions(req, res) {
+    const checkUser = await con.query(bankAccount.searchAccount, [req.params.accountNo]);
+    if (checkUser.rowCount !== 0 && checkUser.rows[0].owner !== req.user.id) {
+      return res.status(401).json({ status: 200, message: 'you are not allowed to view transaction history for this account' });
+    }
+    const accountsTransactions = await con.query(transaction.searchTransaction, [req.params.accountNo]);
+    if (accountsTransactions.rowCount !== 0) return res.status(200).json({ status: 200, data: accountsTransactions.rows });
+    return res.status(401).json({ status: 404, message: 'no transaction has been made on this account number' });
+  }
 }
 export default transactionController;
