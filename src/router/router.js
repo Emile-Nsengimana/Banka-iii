@@ -23,7 +23,7 @@ route.get('/api/v2/accounts/', auth, checkUser.isStaff, accountControl.getAccoun
 // ------------------------------------------- TRANSACTION --------------------------
 route.post('/api/v2/transactions/:accountNo/debit', auth, checkUser.isCashier, transactionControl.debitAccount);
 route.post('/api/v2/transactions/:accountNo/credit', auth, checkUser.isCashier, transactionControl.creditAccount);
-route.get('/api/v2/accounts/:accountNo/transactions', auth, transactionControl.getAccountsTransactions);
-
+route.get('/api/v2/accounts/:accountNo/transactions', auth, checkUser.isOwner, transactionControl.getAccountsTransactions);
+route.get('/api/v2/transactions/:transactionId', auth, checkUser.isCashier, transactionControl.getTransaction);
 
 export default route;
