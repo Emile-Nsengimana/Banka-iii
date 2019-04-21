@@ -4,15 +4,14 @@ CREATE TABLE IF NOT EXISTS
         transactionId serial primary key,
         createdOn date NOT NULL,
         type varchar(10) NOT NULL,
-        accountNumber varchar(30),
+        accountNumber varchar(50),
         cashier integer,
         amount float,
         oldBalance float,
         newBalance float,
         foreign key(cashier) references users
     )`;
-const makeTransaction = `insert into users (
-    transactionId,
+const makeTransaction = `insert into transaction (
     createdOn,
     type,
     accountNumber,
@@ -20,7 +19,7 @@ const makeTransaction = `insert into users (
     amount,
     oldBalance,
     newBalance
-    )VALUES($1,$2,$3,$4,$5,$6,$7,$8) ON CONFLICT DO NOTHING returning *`;
+    )VALUES($1,$2,$3,$4,$5,$6,$7) ON CONFLICT DO NOTHING returning *`;
 
 const searchTransaction = 'select * from transaction where accountNumber = ($1)';
 export default {
