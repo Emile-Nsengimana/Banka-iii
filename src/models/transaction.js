@@ -23,11 +23,12 @@ const makeTransaction = `insert into transaction (
 
 const searchTransaction = 'select * from transaction where accountNumber = ($1)';
 const getTransaction = 'select * from transaction where transactionid = ($1)';
-// const userTransaction = 'select * from transaction where accountnumber in ([])';
+const userTransaction = 'select * from transaction where accountnumber in (select accountnumber from bankaccount where owner = ($1))';
 
 export default {
   transactionTable,
   makeTransaction,
   searchTransaction,
   getTransaction,
+  userTransaction,
 };
