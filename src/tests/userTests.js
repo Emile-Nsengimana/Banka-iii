@@ -9,14 +9,7 @@ chai.use(chaiHttp);
 chai.should();
 
 describe('User tests', () => {
-  // ========================================== SIGNUP ==========================
-  it('.', (done) => {
-    con.query('drop table transaction; drop table bankaccount; drop table users;');
-    createDatabase.createTables();
-    done();
-    return 0;
-  });
-
+  // ========================================== SIGNUP =========================
   it('should be able to signup', (done) => {
     const user = {
       firstName: 'James',

@@ -9,8 +9,7 @@ CREATE TABLE IF NOT EXISTS
         amount float,
         oldBalance float,
         newBalance float,
-        foreign key(cashier) references users,
-        foreign key(accountNumber) references bankaccount
+        foreign key(cashier) references users
     )`;
 const makeTransaction = `insert into transaction (
     createdOn,
@@ -24,6 +23,7 @@ const makeTransaction = `insert into transaction (
 
 const searchTransaction = 'select * from transaction where accountNumber = ($1)';
 const getTransaction = 'select * from transaction where transactionid = ($1)';
+// const userTransaction = 'select * from transaction where accountnumber in ([])';
 
 export default {
   transactionTable,

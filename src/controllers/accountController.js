@@ -57,7 +57,7 @@ class accountController {
   }
 
   // ================================== DISPLAY ACCOUNTS ==============================
-  static async displayAccouts(req, res) {
+  static async displayAccounts(req, res) {
     const allAccounts = await con.query(account.getAllAccount);
     if (!allAccounts.error) return res.status(200).json({ status: 200, data: allAccounts.rows });
     return res.status(401).json({ status: 500, message: 'server error please try again later' });
@@ -89,6 +89,14 @@ class accountController {
     const accountsStatus = await con.query(account.accountStatus, [req.query.status]);
     if (accountsStatus.rowCount !== 0) return res.status(200).json({ status: 200, data: accountsStatus.rows });
     return res.status(401).json({ status: 404, message: `there is no account with status ${req.query.status}` });
+  }
+
+  // ================================== DISPLAY USER ACCOUNTS =============================
+  static async getUserAccounts(req, res) {
+    const getUser = await search.searchUser(req.params.email);
+    const getUserAccounts = await con.query(account.userAccounts, [getUser.rows[0].userid]);
+    if (getUserAccounts.rowCount !== 0) return res.status(200).json({ status: 200, data: getUserAccounts.rows });
+    return res.status(401).json({ status: 404, message: `no account fund for user with email ${req.params.email}` });
   }
 }
 export default accountController;
