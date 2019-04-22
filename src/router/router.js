@@ -25,5 +25,6 @@ route.post('/api/v2/transactions/:accountNo/debit', auth, checkUser.isCashier, t
 route.post('/api/v2/transactions/:accountNo/credit', auth, checkUser.isCashier, transactionControl.creditAccount);
 route.get('/api/v2/accounts/:accountNo/transactions', auth, checkUser.isOwner, transactionControl.getAccountsTransactions);
 route.get('/api/v2/transactions/:transactionId', auth, checkUser.isCashier, transactionControl.getTransaction);
+route.get('/api/v2/transactions', auth, transactionControl.getUserTransactions);
 
 export default route;

@@ -48,5 +48,12 @@ class transactionController {
     if (transactionInfo.rowCount !== 0) return res.status(200).json({ status: 200, data: transactionInfo.rows });
     return res.status(401).json({ status: 404, message: 'transaction not found' });
   }
+
+  // ================================== DISPLAY USER TRANSACTIONS ==============================
+  static async getUserTransactions(req, res) {
+    const userTransactions = await con.query(transaction.userTransaction, [req.user.id]);
+    if (userTransactions.rowCount !== 0) return res.status(200).json({ status: 200, data: userTransactions.rows });
+    return res.status(401).json({ status: 404, message: 'transaction not found' });
+  }
 }
 export default transactionController;

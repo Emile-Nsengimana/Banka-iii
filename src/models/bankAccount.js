@@ -22,6 +22,7 @@ const createAccount = `insert into bankAccount (
 const removeAccount = 'delete from bankAccount where accountNumber = ($1)';
 const searchAccount = 'select * from bankAccount where accountNumber = ($1)';
 const userAccounts = 'select * from bankAccount where owner = ($1)';
+const userAccountsNo = 'select accountnumber from bankAccount where owner = ($1)';
 const changeAccountStatus = 'update bankaccount set status = ($1) where accountnumber = ($2)';
 const deleteAccount = 'delete from bankaccount where accountnumber = ($1)';
 const getAllAccount = 'select * from bankaccount';
@@ -35,6 +36,7 @@ export default {
   removeAccount,
   searchAccount,
   userAccounts,
+  userAccountsNo,
   changeAccountStatus,
   deleteAccount,
   getAllAccount,
