@@ -14,11 +14,11 @@ route.post('/api/v2/auth/login', userControl.login);
 // ------------------------------------------- ACCOUNT ------------------------------
 route.post('/api/v2/accounts', auth, accountControl.createAccount);
 route.patch('/api/v2/account/:accountNo', auth, checkUser.isAdmin, accountControl.changeAccountStatus);
-route.get('/api/v2/accounts', auth, checkUser.isStaff, accountControl.displayAccouts);
-route.get('/api/v2/accounts/:accountNo', auth, checkUser.isStaff, accountControl.searchAccount);
+route.get('/api/v2/accounts', auth, checkUser.isStaff, accountControl.displayAccounts);
+route.get('/api/v2/accounts/:accountNo', auth, checkUser.isOwner, accountControl.searchAccount);
 route.delete('/api/v2/account/:accountNo', auth, checkUser.isStaff, accountControl.deleteAccount);
 route.get('/api/v2/accounts/', auth, checkUser.isStaff, accountControl.getAccountsByStatus);
-
+route.get('/api/v2/user/:email/accounts/', auth, checkUser.isAllowed, accountControl.getUserAccounts);
 
 // ------------------------------------------- TRANSACTION --------------------------
 route.post('/api/v2/transactions/:accountNo/debit', auth, checkUser.isCashier, transactionControl.debitAccount);

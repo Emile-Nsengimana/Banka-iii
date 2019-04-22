@@ -21,20 +21,24 @@ const createAccount = `insert into bankAccount (
 
 const removeAccount = 'delete from bankAccount where accountNumber = ($1)';
 const searchAccount = 'select * from bankAccount where accountNumber = ($1)';
+const userAccounts = 'select * from bankAccount where owner = ($1)';
 const changeAccountStatus = 'update bankaccount set status = ($1) where accountnumber = ($2)';
 const deleteAccount = 'delete from bankaccount where accountnumber = ($1)';
 const getAllAccount = 'select * from bankaccount';
 const updateAccount = 'update bankaccount set balance = ($1) where accountnumber = ($2)';
 const accountStatus = 'select * from bankaccount where status = ($1)';
+const getUserAccounts = 'select accountnumber from bankaccount where owner = ($1)';
 
 export default {
   bankAccountTable,
   createAccount,
   removeAccount,
   searchAccount,
+  userAccounts,
   changeAccountStatus,
   deleteAccount,
   getAllAccount,
   updateAccount,
   accountStatus,
+  getUserAccounts,
 };
