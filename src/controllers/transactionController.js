@@ -3,7 +3,7 @@ import moment from 'moment';
 import transaction from '../models/transaction';
 import search from '../helpers/search';
 import bankAccount from '../models/bankAccount';
-import con from '../../dbConnect';
+import con from '../dbConnect';
 
 class transactionController {
   // ========================================= DEBIT ACCOUNT ====================================
@@ -47,7 +47,6 @@ class transactionController {
   // ========================================= CREDIT ACCOUNT ====================================
   static async creditAccount(req, res) {
     const { amount } = req.body;
-    
     const account = await search.searchAccount(req.params.accountNo);
     if (account.rowCount !== 0) {
       const creditAccount = await con.query(bankAccount.updateAccount, [account.rows[0].balance + amount, req.params.accountNo]);
