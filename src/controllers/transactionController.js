@@ -3,7 +3,7 @@ import moment from 'moment';
 import transaction from '../models/transaction';
 import search from '../helpers/search';
 import bankAccount from '../models/bankAccount';
-import con from '../../dbConnect';
+import con from '../dbConnect';
 
 class transactionController {
   // ========================================= DEBIT ACCOUNT ====================================

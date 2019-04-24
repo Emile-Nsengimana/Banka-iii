@@ -4,8 +4,12 @@
   "description": "Banka is a light-weight core banking application that powers banking operations like account creation, customer deposit and withdrawals",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon --require babel-polyfill app.js",
-    "test": "mocha --require babel-polyfill --require babel-register --timeout 10000 --exit  src/tests/"
+    "start": "npm run create-table && npm run build && node build/app.js",
+    "test": "NODEenv=TEST npm run create-table && NODEenv=TEST mocha --require @babel/polyfill --require @babel/register --timeout 10000 --exit  src/tests/",
+    "create-table": "node --require @babel/polyfill --require @babel/register ./src/db setupDb/createTables",
+    "drop-table": "node --require @babel/polyfill --require @babel/register ./src/db setupDb/dropTables",
+    "build": "./node_modules/.bin/babel ./src -d ./build",
+    "dev": "NODEenv=DEV npm run create-table && NODEenv=DEV nodemon --require @babel/polyfill --require @babel/register ./src/app.js"
   },
   "repository": {
     "type": "git",
@@ -18,11 +22,12 @@
   },
   "homepage": "https://github.com/Emile-Nsengimana/Banka-iii#readme",
   "dependencies": {
-    "babel": "^6.23.0",
-    "babel-cli": "^6.26.0",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-register": "^6.26.0",
+    "@babel/cli": "^7.4.3",
+    "@babel/core": "^7.4.0",
+    "@babel/node": "^7.2.2",
+    "@babel/polyfill": "^7.4.3",
+    "@babel/preset-env": "^7.4.2",
+    "@babel/register": "^7.4.0",
     "chai": "^4.2.0",
     "chai-http": "^4.2.1",
     "dotenv": "^7.0.0",

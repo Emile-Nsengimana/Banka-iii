@@ -1,9 +1,7 @@
 /* eslint-disable no-undef */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import server from '../../server';
-import con from '../../dbConnect';
-import createDatabase from '../../db';
+import server from '../server';
 
 chai.use(chaiHttp);
 chai.should();

@@ -1,7 +1,7 @@
 import moment from 'moment';
 import uuid from 'uuid/v4';
 import search from '../helpers/search';
-import con from '../../dbConnect';
+import con from '../dbConnect';
 import account from '../models/bankAccount';
 
 class accountController {

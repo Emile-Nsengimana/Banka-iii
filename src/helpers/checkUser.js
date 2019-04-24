@@ -1,4 +1,4 @@
-import con from '../../dbConnect';
+import con from '../dbConnect';
 import user from '../models/user';
 import bankAccount from '../models/bankAccount';
 

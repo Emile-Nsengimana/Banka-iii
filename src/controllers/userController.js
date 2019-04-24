@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import jwt from '../helpers/tokenGenerator';
 import userModel from '../models/user';
 import msg from '../helpers/welcome';
-import con from '../../dbConnect';
+import con from '../dbConnect';
 import search from '../helpers/search';
 
 
