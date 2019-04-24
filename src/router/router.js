@@ -4,16 +4,17 @@ import userControl from '../controllers/userController';
 import accountControl from '../controllers/accountController';
 import checkUser from '../helpers/checkUser';
 import transactionControl from '../controllers/transactionController';
+import schema from '../helpers/validations';
 
 const route = express.Router();
 route.get('/', userControl.welcome);
 // ------------------------------------------- AUTHENTICATION -----------------------
-route.post('/api/v2/auth/signup', userControl.signup);
-route.post('/api/v2/auth/login', userControl.login);
+route.post('/api/v2/auth/signup', schema.userSignup, userControl.signup);
+route.post('/api/v2/auth/signin', schema.signIn, userControl.login);
 
 // ------------------------------------------- ACCOUNT ------------------------------
-route.post('/api/v2/accounts', auth, accountControl.createAccount);
-route.patch('/api/v2/account/:accountNo', auth, checkUser.isAdmin, accountControl.changeAccountStatus);
+route.post('/api/v2/accounts/', auth, schema.validateCreateAccount, accountControl.createAccount);
+route.patch('/api/v2/account/:accountNo', auth, checkUser.isAdmin, schema.validateChangeStatus, accountControl.changeAccountStatus);
 route.get('/api/v2/accounts', auth, checkUser.isStaff, accountControl.displayAccounts);
 route.get('/api/v2/accounts/:accountNo', auth, checkUser.isOwner, accountControl.searchAccount);
 route.delete('/api/v2/account/:accountNo', auth, checkUser.isStaff, accountControl.deleteAccount);
@@ -21,8 +22,8 @@ route.get('/api/v2/accounts/', auth, checkUser.isStaff, accountControl.getAccoun
 route.get('/api/v2/user/:email/accounts/', auth, checkUser.isAllowed, accountControl.getUserAccounts);
 
 // ------------------------------------------- TRANSACTION --------------------------
-route.post('/api/v2/transactions/:accountNo/debit', auth, checkUser.isCashier, transactionControl.debitAccount);
-route.post('/api/v2/transactions/:accountNo/credit', auth, checkUser.isCashier, transactionControl.creditAccount);
+route.post('/api/v2/transactions/:accountNo/debit', auth, checkUser.isCashier, schema.validateTransactionSchema, transactionControl.debitAccount);
+route.post('/api/v2/transactions/:accountNo/credit', auth, checkUser.isCashier, schema.validateTransactionSchema, transactionControl.creditAccount);
 route.get('/api/v2/accounts/:accountNo/transactions', auth, checkUser.isOwner, transactionControl.getAccountsTransactions);
 route.get('/api/v2/transactions/:transactionId', auth, checkUser.isCashier, transactionControl.getTransaction);
 route.get('/api/v2/transactions', auth, transactionControl.getUserTransactions);

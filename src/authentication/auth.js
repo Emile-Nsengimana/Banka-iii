@@ -9,11 +9,9 @@ const verifyMe = (req, res, next) => {
   jwt.verify(head, process.env.NEVERMIND, (error, dcrypt) => {
     if (error) {
       return res.status(401).json({ status: 401, error: 'please login or signup' });
-      // eslint-disable-next-line no-else-return
-    } else {
-      req.user = dcrypt;
-      next();
     }
+    req.user = dcrypt;
+    next();
   });
 };
 
