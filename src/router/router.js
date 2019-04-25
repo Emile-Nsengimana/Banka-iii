@@ -6,11 +6,11 @@ import accountControl from '../controllers/accountController';
 import checkUser from '../helpers/checkUser';
 import transactionControl from '../controllers/transactionController';
 import schema from '../helpers/validations';
-import swaggerDoc from '../swagger.json';
+import swaggerDoc from '../../swagger.json';
 
 const route = express.Router();
 route.get('/', userControl.welcome);
-route.use('/swagger', swaggerUI.serve, swaggerUI.setup(swaggerDoc));
+route.use('/api/v2/swagger', swaggerUI.serve, swaggerUI.setup(swaggerDoc));
 
 // ------------------------------------------- AUTHENTICATION -----------------------
 route.post('/api/v2/auth/signup', schema.userSignup, userControl.signup);
