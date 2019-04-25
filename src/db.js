@@ -10,12 +10,20 @@ class setupDb {
     const tableAccount = bankAccount.bankAccountTable;
     const tableTransaction = transaction.transactionTable;
     const tables = `${tableUser}; ${tableAccount}; ${tableTransaction};`;
+    try {
+      await con.query(tables);
+      await con.query(staff);
+    } catch (error) {
+      return error;
+    }
+  }
+
+  static async insertAdmin() {
     const staff = `insert into users (firstName, lastName, gender, phoneNumber, email, password, type, isAdmin)
     VALUES('Emile','Nsengimana','male','0782057791','emile@gmail.com','open','staff','true') ON CONFLICT DO NOTHING returning *;
     insert into users (firstName, lastName, gender, phoneNumber, email, password, type, isAdmin)
     VALUES('Jack','Shema','male','0782057791','jack@gmail.com','open','staff','false') ON CONFLICT DO NOTHING returning *`;
     try {
-      await con.query(tables);
       await con.query(staff);
     } catch (error) {
       return error;
