@@ -1,6 +1,6 @@
 const bankAccountTable = `
 CREATE TABLE IF NOT EXISTS
- bankAccount (
+ bankaccount (
         accountId serial primary key,
         accountNumber varchar(50) NOT NULL,
         createdOn date NOT NULL,
@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS
         type varchar(10) NOT NULL,
         status varchar(10),
         balance float,
-        foreign key(owner) REFERENCES users
+        foreign key(owner) REFERENCES users ON DELETE CASCADE
     )`;
 const createAccount = `insert into bankAccount (
         accountNumber,
