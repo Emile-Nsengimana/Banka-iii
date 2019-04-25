@@ -21,17 +21,7 @@ class setupDb {
       return '';
     }
   }
-
-  static async dropTables() {
-    try {
-      const dropTable = 'drop table transaction; drop table bankaccount; drop table users;';
-      await con.query(dropTable);
-    } catch (error) {
-      return error;
-    }
-  }
 }
 setupDb.createTables();
-setupDb.dropTables();
 
 export default setupDb;

@@ -5,7 +5,6 @@ import msg from '../helpers/welcome';
 import con from '../dbConnect';
 import search from '../helpers/search';
 
-
 dotenv.config();
 class userController {
   static welcome(req, res) {
@@ -17,7 +16,6 @@ class userController {
     const {
       firstName, lastName, gender, phoneNo, email, password, confirmPassword, type,
     } = req.user;
-
     const findUser = await search.searchUser(req.user.email);
     if (findUser.rowCount !== 0) {
       return res.status(409).json({ status: 409, error: 'user with the same email already exist' });

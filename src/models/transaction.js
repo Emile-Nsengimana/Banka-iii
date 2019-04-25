@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS
         amount float,
         oldBalance float,
         newBalance float,
-        foreign key(cashier) references users
+        foreign key(cashier) references users ON DELETE CASCADE
     )`;
 const makeTransaction = `insert into transaction (
     createdOn,
