@@ -2,21 +2,10 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import server from '../server';
-import jwt from '../helpers/tokenGenerator';
 
 chai.use(chaiHttp);
 chai.should();
 
-function toks() {
-  const user = {
-    id: 1,
-    email: 'jack@gmail.com',
-    isAdmin: true,
-    type: 'staff',
-  };
-  const token = jwt.signToken(user.value);
-  console.log(toks.token);
-}
 describe('Validation tests', () => {
   // ========================================== SIGNUP =========================
   it('should require a gender', (done) => {
@@ -97,20 +86,4 @@ describe('Validation tests', () => {
   });
 
   // -------------------------------------------------------------------------------
-
-  it('should require a gender', (done) => {
-    const account = {
-      status: 'clientm',
-    };
-
-    chai.request(server)
-      .patch('/api/v2/account/12345')
-      .send(account)
-      .set(token, toks.token)
-      .end((err, res) => {
-        res.user.should.be.an('object');
-        next();
-      });
-    done();
-  });
 });
