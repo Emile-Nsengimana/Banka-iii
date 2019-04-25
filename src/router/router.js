@@ -1,13 +1,17 @@
 import express from 'express';
+import swaggerUI from 'swagger-ui-express';
 import auth from '../authentication/auth';
 import userControl from '../controllers/userController';
 import accountControl from '../controllers/accountController';
 import checkUser from '../helpers/checkUser';
 import transactionControl from '../controllers/transactionController';
 import schema from '../helpers/validations';
+import swaggerDoc from '../swagger.json';
 
 const route = express.Router();
 route.get('/', userControl.welcome);
+route.use('/swagger', swaggerUI.serve, swaggerUI.setup(swaggerDoc));
+
 // ------------------------------------------- AUTHENTICATION -----------------------
 route.post('/api/v2/auth/signup', schema.userSignup, userControl.signup);
 route.post('/api/v2/auth/signin', schema.signIn, userControl.login);
