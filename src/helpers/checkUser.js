@@ -21,7 +21,7 @@ class checkUser {
       return res.status(401).json({ status: 401, error: 'please login or signup' });
     }
     if (userFund.rows[0].type !== 'staff') {
-      return res.status(401).json({ status: 401, error: 'permission denied' });
+      return res.status(403).json({ status: 403, error: 'permission denied' });
     }
     req.user = userFund;
     next();
@@ -33,10 +33,10 @@ class checkUser {
       return res.status(401).json({ status: 401, error: 'please login or signup' });
     }
     if (userFund.rows[0].type === 'staff' && userFund.rows[0].isadmin === true) {
-      return res.status(401).json({ status: 401, error: 'only cashier is allowed to debit/credit account' });
+      return res.status(403).json({ status: 403, error: 'only cashier is allowed to debit/credit account' });
     }
     if (userFund.rows[0].type === 'client') {
-      return res.status(401).json({ status: 401, error: 'you are not allowed to perfom this action' });
+      return res.status(403).json({ status: 403, error: 'you are not allowed to perfom this action' });
     }
 
     req.user = userFund;
@@ -48,7 +48,7 @@ class checkUser {
     const getUser = await con.query(user.searchUserById, [req.user.id]);
     if (checkOwner.rowCount !== 0) {
       if (checkOwner.rows[0].owner !== req.user.id && getUser.rows[0].type !== 'staff') {
-        return res.status(401).json({ status: 200, message: 'access denied' });
+        return res.status(403).json({ status: 403, message: 'access denied' });
       }
     }
     next();

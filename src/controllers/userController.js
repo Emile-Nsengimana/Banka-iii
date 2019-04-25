@@ -20,14 +20,14 @@ class userController {
 
     const findUser = await search.searchUser(req.user.email);
     if (findUser.rowCount !== 0) {
-      return res.status(400).json({ status: 400, error: 'user with the same email already exist' });
+      return res.status(409).json({ status: 409, error: 'user with the same email already exist' });
     } if (password !== confirmPassword) {
       return res.status(400).json({ status: 400, error: 'password doesn\'t match' });
     }
     const addUser = await con.query(userModel.addUser,
       [firstName, lastName, gender, phoneNo, email, password, type, false]);
     if (addUser.rowCount !== 0) {
-      const token = jwt.signToken(addUser);
+      const token = jwt.signToken(addUser.rows[0]);
       return res.status(201).json({
         status: 201,
         data: {
@@ -38,7 +38,6 @@ class userController {
           gender: addUser.rows[0].gender,
           phonenumber: addUser.rows[0].phonenumber,
           email: addUser.rows[0].email,
-          password: addUser.rows[0].password,
           type: addUser.rows[0].type,
           isadmin: addUser.rows[0].isadmin,
         },

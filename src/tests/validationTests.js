@@ -73,6 +73,7 @@ describe('Validation tests', () => {
   // -------------------------------------------------------------------------------
   it('should not be able to signin without email', (done) => {
     const user = {
+      email: '',
       password: '@Jam7891qazxsw!',
     };
 
