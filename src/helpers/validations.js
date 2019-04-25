@@ -13,14 +13,14 @@ class dataValidations {
     };
 
     const userSchema = joi.object().keys({
-      firstName: joi.string().alphanum().min(3).required(),
-      lastName: joi.string().alphanum().min(3).required(),
+      firstName: joi.string().min(3).required(),
+      lastName: joi.string().min(3).required(),
       gender: joi.string().valid('male', 'female').required(),
       phoneNo: joi.string().required(),
       email: joi.string().email().required(),
       password: new PasswordComplexity(complexityOptions),
       confirmPassword: joi.string().required(),
-      type: joi.string().valid('client', 'staff').required(),
+      type: joi.string().valid('client').required(),
       isAdmin: joi.boolean(),
     });
     const {
@@ -39,13 +39,13 @@ class dataValidations {
       return res.status(400).json({ status: 400, error: 'type is required' });
     }
 
-    const sex = gender.toLowerCase();
-    const mail = email.toLowerCase();
-    const userType = type.toLowerCase();
+    const sex = gender.toLowerCase().trim();
+    const mail = email.toLowerCase().trim();
+    const userType = type.toLowerCase().trim();
 
     const newUser = userSchema.validate({
-      firstName,
-      lastName,
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
       gender: sex,
       phoneNo,
       email: mail,
@@ -73,7 +73,7 @@ class dataValidations {
 
     const { email, password } = req.body;
     const credentials = loginSchema.validate({
-      email,
+      email: email.trim(),
       password,
     });
 
@@ -87,7 +87,6 @@ class dataValidations {
 
   static validateCreateAccount(req, res, next) {
     const { type } = req.body;
-
     if (!type) {
       return res.status(400).json({ status: 401, error: 'type is required' });
     }
@@ -96,7 +95,7 @@ class dataValidations {
       type: joi.string().valid('current', 'savings').required(),
     });
 
-    const newAccount = newAccountSchema.validate({ type: type.toLowerCase() });
+    const newAccount = newAccountSchema.validate({ type: type.toLowerCase().trim() });
 
     if (newAccount.error) {
       return res.status(400).json({ status: 401, error: newAccount.error.details[0].message.replace('"', ' ').replace('"', '') });
@@ -117,7 +116,7 @@ class dataValidations {
       status: joi.string().valid('dormant', 'draft', 'active').required(),
     });
 
-    const newStatus = newAccountSchema.validate({ status: status.toLowerCase() });
+    const newStatus = newAccountSchema.validate({ status: status.toLowerCase().trim() });
 
     if (newStatus.error) {
       return res.status(400).json({ status: 401, error: newStatus.error.details[0].message.replace('"', ' ').replace('"', '') });
@@ -128,7 +127,6 @@ class dataValidations {
   }
 
   static validateTransactionSchema(req, res, next) {
-
     const transactionSchema = joi.object().keys({
       amount: joi.number().positive().required(),
     });
@@ -138,8 +136,14 @@ class dataValidations {
         error: 'the amount is required',
       });
     }
+    if (typeof (req.body.amount) !== 'number' || req.body.amount < 0) {
+      return res.status(400).json({
+        status: 400,
+        error: 'please provide invalid amount number',
+      });
+    }
     const checkAmount = transactionSchema.validate({
-      amount: req.body,
+      amount: parseFloat(req.body.amount),
     });
     const { amount } = checkAmount.value;
     req.body = amount;

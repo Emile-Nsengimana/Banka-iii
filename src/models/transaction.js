@@ -21,7 +21,7 @@ const makeTransaction = `insert into transaction (
     newBalance
     )VALUES($1,$2,$3,$4,$5,$6,$7) ON CONFLICT DO NOTHING returning *`;
 
-const searchTransaction = 'select * from transaction where accountNumber = ($1)';
+const searchTransaction = 'select transactionid,createdon, type, cashier, amount, oldbalance, newbalance from transaction where accountNumber = ($1)';
 const getTransaction = 'select * from transaction where transactionid = ($1)';
 const userTransaction = 'select * from transaction where accountnumber in (select accountnumber from bankaccount where owner = ($1))';
 

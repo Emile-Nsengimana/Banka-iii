@@ -112,8 +112,8 @@ describe('User tests', () => {
   // ------------------------------------------------------------------------------------------
   it('should not be able to signup without providing all required info', (done) => {
     const user5 = {
-      firstName: '',
-      lastName: '',
+      firstName: 'a',
+      lastName: 'a',
       gender: 'male',
       phoneNo: '0701234567',
       email: 'abcd@gmail.com',

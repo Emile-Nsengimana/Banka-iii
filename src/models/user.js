@@ -1,6 +1,5 @@
 const userTable = `
-CREATE TABLE IF NOT EXISTS
- users (
+CREATE TABLE IF NOT EXISTS users (
         userId serial primary key,
         firstName varchar(30) NOT NULL,
         lastName varchar(25) NOT NULL,
