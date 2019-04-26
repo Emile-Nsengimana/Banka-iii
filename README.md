@@ -6,6 +6,26 @@ Banka is a light-weight core banking application that powers banking operations 
 - `Nodejs` - a JavaScript run-time environment that executes JavaScript code outside of a browser
 - `NPM` - a package manager for the JavaScript programming language
 - `Git` - version-control system for tracking changes in source code during software development
+## Documentation
+
+##### Expected Features
+
+1. User (client) can sign up.
+2. User (client) can login.
+3. User (client) can create an account.
+4. User (client) can view account transaction history.
+5. User (client) can view a specific account transaction.
+6. Staff (cashier) can debit user (client) account.
+7. Staff (cashier) can credit user (client) account.
+8. Admin/staff can view all user accounts.
+9. Admin/staff can view a specific user account.
+10. Admin/staff can activate or deactivate an account.
+11. Admin/staff can delete a specific user account.
+12. Admin can create staff and admin user accounts.
+### Dependencies
+
+- `Nodejs` - a JavaScript run-time environment that executes JavaScript code outside of a browser
+- `NPM` - a package manager for the JavaScript programming language
 ### SETUP
 First clone it to your machine:
 ```
@@ -46,3 +66,4 @@ npm test
 
 ### How can it be manually tested
 - using [postman](https://www.getpostman.com/downloads/)
+
