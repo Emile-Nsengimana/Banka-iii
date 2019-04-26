@@ -42,7 +42,6 @@ class dataValidations {
     const sex = gender.toLowerCase().trim();
     const mail = email.toLowerCase().trim();
     const userType = type.toLowerCase().trim();
-
     const newUser = userSchema.validate({
       firstName: firstName.trim(),
       lastName: lastName.trim(),
