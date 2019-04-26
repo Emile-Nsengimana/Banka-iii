@@ -1,10 +1,7 @@
 /* eslint-disable no-undef */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import jwt from '../helpers/tokenGenerator';
 import server from '../server';
-import user from '../models/user';
-import con from '../db';
 
 chai.use(chaiHttp);
 chai.should();
@@ -12,7 +9,7 @@ chai.should();
 describe('User tests', () => {
   // ========================================== SIGNUP =========================
   it('should be able to signup', (done) => {
-    const user = {
+    const user0 = {
       firstName: 'James',
       lastName: 'Shema',
       gender: 'male',
@@ -24,7 +21,7 @@ describe('User tests', () => {
     };
     chai.request(server)
       .post('/api/v2/auth/signup')
-      .send(user)
+      .send(user0)
       .end((err, res) => {
         res.body.status.should.be.equal(201);
         res.body.should.be.an('object');

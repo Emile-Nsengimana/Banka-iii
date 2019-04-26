@@ -4,6 +4,7 @@ import userModel from '../models/user';
 import msg from '../helpers/welcome';
 import con from '../dbConnect';
 import search from '../helpers/search';
+import crypt from 'bcrypt';
 
 dotenv.config();
 class userController {
@@ -22,8 +23,9 @@ class userController {
     } if (password !== confirmPassword) {
       return res.status(400).json({ status: 400, error: 'password doesn\'t match' });
     }
+    const passkey = crypt.hashSync(password, 10);
     const addUser = await con.query(userModel.addUser,
-      [firstName, lastName, gender, phoneNo, email, password, type, false]);
+      [firstName, lastName, gender, phoneNo, email, passkey, type, false]);
     if (addUser.rowCount !== 0) {
       const token = jwt.signToken(addUser.rows[0]);
       return res.status(201).json({
@@ -48,7 +50,8 @@ class userController {
     const findUser = await search.searchUser(req.user.email);
 
     if (findUser.rowCount !== 0) {
-      if (findUser.rows[0].password === req.user.password) {
+      const passkey = crypt.compareSync(req.user.password, findUser.rows[0].password);
+      if (passkey) {
         const jwtoken = jwt.signToken(findUser.rows[0]);
 
         const user = findUser.rows[0];
