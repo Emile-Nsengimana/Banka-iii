@@ -1,10 +1,10 @@
 import dotenv from 'dotenv';
+import crypt from 'bcrypt';
 import jwt from '../helpers/tokenGenerator';
 import userModel from '../models/user';
 import msg from '../helpers/welcome';
 import con from '../dbConnect';
 import search from '../helpers/search';
-import crypt from 'bcrypt';
 
 dotenv.config();
 class userController {
