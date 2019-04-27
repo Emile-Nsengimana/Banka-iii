@@ -15,8 +15,8 @@ class setupDb {
     const tables = `${tableUser}; ${tableAccount}; ${tableTransaction};`;
 
     try {
-      await con.query(user.addUser, ['Emile', 'Nsengimana', 'male', '0782057791', 'emile@gmail.com', passkey, 'staff', true]);
-      await con.query(user.addUser, ['Jack', 'Shema', 'male', '0782057791', 'jack@gmail.com', passkey, 'staff', false]);
+      await con.query(user.addUser, ['Emile', 'Nsengimana', 'male', '0782057791', 'admin@gmail.com', passkey, 'staff', true]);
+      await con.query(user.addUser, ['Jack', 'Shema', 'male', '0782057791', 'staff@gmail.com', passkey, 'staff', false]);
       return 'done';
     } catch (error) {
       return '';
