@@ -6,7 +6,7 @@
   "scripts": {
     "start": "NODEenv=PRO npm run create-table && npm run clean && npm run build && node ./build/app.js",
     "test": "NODEenv=TEST npm run create-table && NODEenv=TEST nyc --reporter=html --reporter=text mocha --require @babel/polyfill --require @babel/register --timeout 10000 --exit  src/tests/ && NODEenv=TEST npm run drop-table ",
-    "create-table": "node --require @babel/polyfill --require @babel/register ./src/db setupDb/createTables",
+    "create-table": "node --require ./build/db setupDb/createTables",
     "drop-table": "node --require @babel/polyfill --require @babel/register ./src/dropTables.js ",
     "build": "./node_modules/.bin/babel ./src -d ./build",
     "dev": "NODEenv=DEV npm run create-table && NODEenv=DEV nodemon --require @babel/polyfill --require @babel/register ./src/server.js",
