@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npm run create-table && node ./server.js",
     "test": "NODEenv=TEST npm run create-table && NODEenv=TEST nyc --reporter=html --reporter=text mocha --require @babel/polyfill --require @babel/register --timeout 10000 --exit  src/tests/ && NODEenv=TEST npm run drop-table ",
-    "create-table": "babel-node ./src/db.js",
+    "create-table": "node --require @babel/polyfill --require @babel/register ./src/db.js",
     "drop-table": "node --require @babel/polyfill --require @babel/register ./src/dropTables.js ",
     "build": "./node_modules/.bin/babel ./src -d ./build",
     "dev": "NODEenv=DEV npm run create-table && NODEenv=DEV nodemon --require @babel/polyfill --require @babel/register ./src/server.js",
@@ -35,6 +35,12 @@
     "nyc": "^14.0.0",
     "pg": "^7.10.0",
     "swagger-ui-express": "^4.0.2",
+    "@babel/cli": "^7.4.3",
+    "@babel/core": "^7.4.0",
+    "@babel/node": "^7.2.2",
+    "@babel/polyfill": "^7.4.3",
+    "@babel/preset-env": "^7.4.2",
+    "@babel/register": "^7.4.0",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
@@ -42,12 +48,6 @@
     "nodemon": "^1.18.11",
     "chai": "^4.2.0",
     "chai-http": "^4.2.1",
-    "@babel/cli": "^7.4.3",
-    "@babel/core": "^7.4.0",
-    "@babel/node": "^7.2.2",
-    "@babel/polyfill": "^7.4.3",
-    "@babel/preset-env": "^7.4.2",
-    "@babel/register": "^7.4.0",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.17.2"
