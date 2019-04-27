@@ -16,7 +16,7 @@ if (process.env.NODEenv === 'DEV') {
   });
 } else {
   pool = new Pool({
-    connectionString: process.env.URI,
+    connectionString: process.env.DATABASE_URL,
   });
 }
 
