@@ -76,7 +76,7 @@ class accountController {
       }
       const deleteAccount = await con.query(account.deleteAccount, [req.params.accountNo]);
       if (deleteAccount.rowCount !== 0) {
-        return res.status(200).set.json({ status: 200, message: 'Account successfully deleted' });
+        return res.status(200).json({ status: 200, message: 'Account successfully deleted' });
       }
     }
     return res.status(404).json({ status: 404, message: 'Account not found' });
