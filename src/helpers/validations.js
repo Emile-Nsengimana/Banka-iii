@@ -99,7 +99,7 @@ class dataValidations {
   static validateCreateAccount(req, res, next) {
     const { type } = req.body;
     if (!type) {
-      return res.status(400).json({ status: 401, error: 'type is required' });
+      return res.status(400).json({ status: 400, error: 'type is required' });
     }
 
     const newAccountSchema = joi.object().keys({
@@ -109,7 +109,7 @@ class dataValidations {
     const newAccount = newAccountSchema.validate({ type: type.toLowerCase().trim() });
 
     if (newAccount.error) {
-      return res.status(400).json({ status: 401, error: newAccount.error.details[0].message.replace('"', ' ').replace('"', '') });
+      return res.status(400).json({ status: 400, error: newAccount.error.details[0].message.replace('"', ' ').replace('"', '') });
     }
 
     req.body = newAccount.value;
@@ -120,7 +120,7 @@ class dataValidations {
     const { status } = req.body;
 
     if (!status) {
-      return res.status(400).json({ status: 401, error: 'account status is required' });
+      return res.status(400).json({ status: 400, error: 'account status is required' });
     }
 
     const newAccountSchema = joi.object().keys({
@@ -130,7 +130,7 @@ class dataValidations {
     const newStatus = newAccountSchema.validate({ status: status.toLowerCase().trim() });
 
     if (newStatus.error) {
-      return res.status(400).json({ status: 401, error: newStatus.error.details[0].message.replace('"', ' ').replace('"', '') });
+      return res.status(400).json({ status: 400, error: newStatus.error.details[0].message.replace('"', ' ').replace('"', '') });
     }
 
     req.body = newStatus.value;

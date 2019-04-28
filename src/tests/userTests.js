@@ -6,7 +6,83 @@ import server from '../server';
 chai.use(chaiHttp);
 chai.should();
 
+
+let adminToken;
+let staffToken;
 describe('User tests', () => {
+  // ========================================== ADMIN SIGN IN ========================
+  it('should be able to sign in admin', (done) => {
+    const user = {
+      email: 'admin@gmail.com',
+      password: 'open',
+
+    };
+    chai.request(server)
+      .post('/api/v2/auth/signin')
+      .send(user)
+      .end((err, res) => {
+        res.body.status.should.be.equal(200);
+        adminToken = res.body.data.token;
+      });
+    done();
+  });
+  // ========================================== STAFF SIGN IN ========================
+  it('should be able to sign in staff', (done) => {
+    const user = {
+      email: 'staff@gmail.com',
+      password: 'open',
+
+    };
+    chai.request(server)
+      .post('/api/v2/auth/signin')
+      .send(user)
+      .end((err, res) => {
+        res.body.status.should.be.equal(200);
+        staffToken = res.body.data.token;
+      });
+    done();
+  });
+  // ========================================== CREATE STAFF ACCOUNT ========================
+  it('should not be able to create staff account', (done) => {
+    const userB = {
+      firstName: 'James',
+      lastName: 'Shema',
+      gender: 'male',
+      phoneNo: '0701234567',
+      email: 'shema@gmail.com',
+      password: '@Jam7891qazxsw!',
+      confirmPassword: '@Jam7891qazxsw!',
+      type: 'client',
+    };
+    chai.request(server)
+      .post('/api/v2/auth/staff/signup')
+      .send(userB)
+      .set('token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJzdGFmZkBnbWFpbC5jb20iLCJpc0FkbWluIjpmYWxzZSwidHlwZSI6InN0YWZmIiwiaWF0IjoxNTU2NDM4MTE0fQ.OpYSYFGXvzisKx7CVLQ2ALJRv6FqUxifez1-L9HvBZc')
+      .end((err, res) => {
+        res.body.status.should.be.equal(401);
+      });
+    done();
+  });
+  it('should not be able to create staff account', (done) => {
+    const userA = {
+      firstName: 'James',
+      lastName: 'Shema',
+      gender: 'male',
+      phoneNo: '0701234567',
+      email: 'shema@gmail.com',
+      password: '@Jam7891qazxsw!',
+      confirmPassword: '@Jam7891qazxsw!',
+      type: 'client',
+    };
+    chai.request(server)
+      .post('/api/v2/auth/staff/signup')
+      .send(userA)
+      .set('token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJzdGFmZkBnbWFpbC5jb20iLCJpc0FkbWluIjpmYWxzZSwidHlwZSI6InN0YWZmIiwiaWF0IjoxNTU2NDM4MTE0fQ.OpYSYFGXvzisKx7CVLQ2ALJRv6FqUxifez1-L9HvBZc')
+      .end((err, res) => {
+        res.body.status.should.be.equal(401);
+      });
+    done();
+  });
   // ========================================== SIGNUP =========================
   it('should be able to signup', (done) => {
     const user0 = {
@@ -42,7 +118,7 @@ describe('User tests', () => {
       lastName: 'Shema',
       gender: 'male',
       phoneNo: '0701234567',
-      email: 'shema@gmail.com',
+      email: 'admin@gmail.com',
       password: '@Jam7891qazxsw!',
       confirmPassword: '@Jam7891qazxsw!',
       type: 'client',
@@ -51,7 +127,7 @@ describe('User tests', () => {
       .post('/api/v2/auth/signup')
       .send(user1)
       .end((err, res) => {
-        res.body.status.should.be.equal(400);
+        res.body.status.should.be.equal(409);
         res.body.should.be.an('object');
         res.body.error.should.be.a('string');
       });

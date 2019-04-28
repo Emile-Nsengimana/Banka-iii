@@ -4,7 +4,7 @@
       "version": "2",
       "title": "Banka Application API Endpoints"
     },
-    "host": "localhost:4000",
+    "host": "ch-iii.herokuapp.com",
     "basePath": "/",
     "securityDefinitions": {
       "Headers": {
