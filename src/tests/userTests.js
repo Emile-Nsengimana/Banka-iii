@@ -26,11 +26,11 @@ describe('User tests', () => {
         res.body.status.should.be.equal(201);
         res.body.should.be.an('object');
         res.body.data.should.have.property('token');
-        res.body.data.should.have.property('firstName');
-        res.body.data.should.have.property('lastName');
+        res.body.data.should.have.property('firstname');
+        res.body.data.should.have.property('lastname');
         res.body.data.should.have.property('email');
         res.body.data.should.have.property('type');
-        res.body.data.should.have.property('isAdmin');
+        res.body.data.should.have.property('isadmin');
       });
     done();
   });

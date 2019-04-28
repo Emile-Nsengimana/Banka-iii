@@ -4,7 +4,9 @@ import account from '../models/bankAccount';
 
 class search {
   static async searchUser(email) {
-    return con.query(userModel.searchUser, [email.toLowerCase()]);
+    const u = con.query(userModel.searchUser, [email.toLowerCase()]);
+    console.log(u);
+    return u;
   }
 
   static async searchUserById(id) {
