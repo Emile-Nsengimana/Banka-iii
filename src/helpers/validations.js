@@ -16,11 +16,11 @@ class dataValidations {
       firstName: joi.string().min(3).required(),
       lastName: joi.string().min(3).required(),
       gender: joi.string().valid('male', 'female').required(),
-      phoneNo: joi.string().required(),
+      phoneNo: joi.string().trim().regex(/^[0-9]{10,13}$/).required(),
       email: joi.string().email().required(),
       password: new PasswordComplexity(complexityOptions),
       confirmPassword: joi.string().required(),
-      type: joi.string().valid('client').required(),
+      type: joi.string().valid('client', 'staff').required(),
       isAdmin: joi.boolean(),
     });
     const {
@@ -55,7 +55,16 @@ class dataValidations {
 
     if (newUser.error) {
       if (newUser.error.details[0].type === 'passwordComplexity.base') {
-        return res.status(400).json({ status: 400, error: 'password length must be 8 with atleast an upper, lower case letter, and a number,' });
+        return res.status(400).json({
+          status: 400,
+          error: 'password length must be 8 with atleast an upper, lower case letter, and a number',
+        });
+      }
+      if (newUser.error.details[0].path[0] === 'phoneNo') {
+        return res.status(400).json({
+          status: 400,
+          error: 'invalid phone number',
+        });
       }
       return res.status(401).json({ status: 401, error: newUser.error.details[0].message.replace('"', ' ').replace('"', '') });
     }
@@ -77,7 +86,10 @@ class dataValidations {
     });
 
     if (credentials.error) {
-      return res.status(401).json({ status: 401, error: credentials.error.details[0].message.replace('"', ' ').replace('"', '') });
+      return res.status(401).json({
+        status: 401,
+        error: credentials.error.details[0].message.replace('"', ' ').replace('"', ''),
+      });
     }
 
     req.user = credentials.value;

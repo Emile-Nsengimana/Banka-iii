@@ -13,6 +13,7 @@ route.get('/', userControl.welcome);
 route.use('/api/v2/swagger', swaggerUI.serve, swaggerUI.setup(swaggerDoc));
 
 // ------------------------------------------- AUTHENTICATION -----------------------
+route.post('/api/v2/auth/staff/signup', auth, checkUser.isAdmin, schema.userSignup, userControl.staffSignup);
 route.post('/api/v2/auth/signup', schema.userSignup, userControl.signup);
 route.post('/api/v2/auth/signin', schema.signIn, userControl.login);
 
