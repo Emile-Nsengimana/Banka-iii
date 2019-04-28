@@ -20,28 +20,19 @@ class dataValidations {
       email: joi.string().email().required(),
       password: new PasswordComplexity(complexityOptions),
       confirmPassword: joi.string().required(),
-      type: joi.string().valid('client', 'staff').required(),
       isAdmin: joi.boolean(),
     });
     const {
-      firstName, lastName, gender, phoneNo, email, password, confirmPassword, type,
+      firstName, lastName, gender, phoneNo, email, password, confirmPassword,
     } = req.body;
-
-    if (!gender) {
-      return res.status(400).json({ status: 400, error: 'gender is required' });
+    if (!firstName || !lastName || !gender || !email) {
+      return res.status(400).json({
+        status: 400,
+        error: 'please you must provide firstName, lastName, gender, email',
+      });
     }
-
-    if (!email) {
-      return res.status(400).json({ status: 400, error: 'email is required' });
-    }
-
-    if (!type) {
-      return res.status(400).json({ status: 400, error: 'type is required' });
-    }
-
     const sex = gender.toLowerCase().trim();
     const mail = email.toLowerCase().trim();
-    const userType = type.toLowerCase().trim();
     const newUser = userSchema.validate({
       firstName: firstName.trim(),
       lastName: lastName.trim(),
@@ -50,27 +41,21 @@ class dataValidations {
       email: mail,
       password,
       confirmPassword,
-      type: userType,
     });
-
     if (newUser.error) {
       if (newUser.error.details[0].type === 'passwordComplexity.base') {
-        return res.status(400).json({
-          status: 400,
-          error: 'password length must be 8 with atleast an upper, lower case letter, and a number',
-        });
+        throw Error('password length must be 8 with atleast an upper, lower case letter, and a number');
       }
       if (newUser.error.details[0].path[0] === 'phoneNo') {
-        return res.status(400).json({
-          status: 400,
-          error: 'invalid phone number',
-        });
+        throw Error('invalid phone number');
       }
-      return res.status(401).json({ status: 401, error: newUser.error.details[0].message.replace('"', ' ').replace('"', '') });
+      throw Error(newUser.error.details[0].message.replace('"', ' ').replace('"', ''));
     }
-
-    req.user = newUser.value;
-    next();
+    if (!newUser.error) {
+      req.user = newUser.value;
+      next();
+    }
+    return Error;
   }
 
   static signIn(req, res, next) {

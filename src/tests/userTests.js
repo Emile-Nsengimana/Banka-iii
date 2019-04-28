@@ -127,6 +127,60 @@ describe('User tests', () => {
       });
     done();
   });
+});
+describe('Account tests', () => {
+  let accountNo;
+  // ========================================== CREATE ACCOUNT ========================
+  it('should create a bank account', (done) => {
+    const account = {
+      type: 'current',
+    };
+    chai.request(server)
+      .post('/api/v2/accounts/')
+      .send(account)
+      .set('token', process.env.adminToken)
+      .end((err, res) => {
+        res.body.status.should.be.equal(201);
+        accountNo = res.body.data.accountNumber;
+      });
+    done();
+  });
 
-  // ========================================== LOGIN ==========================
+  // ========================================== SEARCH ACCOUNT ========================
+  it('should search a specific bank account', (done) => {
+    chai.request(server)
+      .get(`/api/v2/accounts/${accountNo}`)
+      .set('token', process.env.adminToken)
+      .end((err, res) => {
+        res.body.status.should.be.equal(200);
+      });
+    done();
+  });
+  // ========================================== GET ACCOUNTS ========================
+  it('should list all account', (done) => {
+    chai.request(server)
+      .get('/api/v2/accounts')
+      .set('token', process.env.adminToken)
+      .end((err, res) => {
+        res.body.status.should.be.equal(200);
+      });
+    done();
+  });
+});
+describe('Account tests', () => {
+  // ========================================== CREATE ACCOUNT ========================
+  it('should create a bank account', (done) => {
+    const account = {
+      type: 'current',
+    };
+    chai.request(server)
+      .post(`/api/v2/transactions/${accountNo}/debit`)
+      .send(account)
+      .set('token', process.env.adminToken)
+      .end((err, res) => {
+        res.body.status.should.be.equal(201);
+        accountNo = res.body.data.accountNumber;
+      });
+    done();
+  });
 });
