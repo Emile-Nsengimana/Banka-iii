@@ -15,17 +15,25 @@ class userController {
   // ========================================== STAFF SIGNUP =====================================
   static async staffSignup(req, res) {
     const {
-      firstName, lastName, gender, phoneNo, email, password, confirmPassword,
+      firstName, lastName, gender, phoneNo, email, password, confirmPassword, isAdmin,
     } = req.user;
     const findUser = await search.searchUser(req.user.email);
     if (findUser.rowCount !== 0) {
-      return res.status(409).json({ status: 409, error: 'user with the same email already exist' });
+      return res.status(409).json({
+        status: 409,
+        error: 'user with the same email already exist',
+      });
     } if (password !== confirmPassword) {
-      return res.status(400).json({ status: 400, error: 'password doesn\'t match' });
+      return res.status(400).json({
+        status: 400,
+        error: 'password doesn\'t match',
+      });
     }
     const passkey = crypt.hashSync(password, 10);
     const addUser = await con.query(userModel.addUser,
-      [firstName, lastName, gender, phoneNo, email, passkey, false]);
+      [firstName.toLowerCase().trim(), lastName.toLowerCase().trim(),
+        gender, phoneNo, email.toLowerCase().trim(), passkey, 'staff', isAdmin]);
+
     if (addUser.rowCount !== 0) {
       const token = jwt.signToken(addUser.rows[0]);
       return res.status(201).json({
@@ -42,7 +50,7 @@ class userController {
           isadmin: addUser.rows[0].isadmin,
         },
       });
-    } return res.status(400).json({ status: 500, error: 'server error' });
+    } return res.status(500).json({ status: 500, error: 'server error' });
   }
 
   // ================================================== SIGNUP =====================================
@@ -50,38 +58,42 @@ class userController {
     const {
       firstName, lastName, gender, phoneNo, email, password, confirmPassword,
     } = req.user;
-    try {
-      const findUser = await search.searchUser(req.user.email);
-      if (findUser.rowCount !== 0) {
-        return res.status(409).json({ status: 409, error: 'user with the same email already exist' });
-      } if (password !== confirmPassword) {
-        return res.status(400).json({ status: 400, error: 'password doesn\'t match' });
-      }
-      const passkey = crypt.hashSync(password, 10);
-      const addUser = await con.query(userModel.addUser,
-        [firstName, lastName, gender, phoneNo, email, passkey, 'client', false]);
-      if (addUser.rowCount !== 0) {
-        const token = jwt.signToken(addUser.rows[0]);
-        return res.status(201).json({
-          status: 201,
-          data: {
-            token,
-            userid: addUser.rows[0].userid,
-            firstname: addUser.rows[0].firstname,
-            lastname: addUser.rows[0].lastname,
-            gender: addUser.rows[0].gender,
-            phonenumber: addUser.rows[0].phonenumber,
-            email: addUser.rows[0].email,
-            type: addUser.rows[0].type,
-            isadmin: addUser.rows[0].isadmin,
-          },
-        });
-      } return res.status(500).json({ status: 500, error: 'server error' });
-    } catch (Error) {
-      return res.status(Error.status).json({
-        error: res.body,
+    const findUser = await search.searchUser(req.user.email);
+    if (findUser.rowCount !== 0) {
+      return res.status(409).json({
+        status: 409,
+        error: 'user with the same email already exist',
+      });
+    } if (password !== confirmPassword) {
+      return res.status(400).json({
+        status: 400,
+        error: 'password doesn\'t match',
       });
     }
+    const passkey = crypt.hashSync(password, 10);
+    const addUser = await con.query(userModel.addUser,
+      [firstName.toLowerCase().trim(), lastName.toLowerCase().trim(), gender, phoneNo,
+        email.toLowerCase().trim(), passkey, 'client', false]);
+    if (addUser.rowCount !== 0) {
+      const token = jwt.signToken(addUser.rows[0]);
+      return res.status(201).json({
+        status: 201,
+        data: {
+          token,
+          userid: addUser.rows[0].userid,
+          firstname: addUser.rows[0].firstname,
+          lastname: addUser.rows[0].lastname,
+          gender: addUser.rows[0].gender,
+          phonenumber: addUser.rows[0].phonenumber,
+          email: addUser.rows[0].email,
+          type: addUser.rows[0].type,
+          isadmin: addUser.rows[0].isadmin,
+        },
+      });
+    } return res.status(500).json({
+      status: 500,
+      error: 'server error',
+    });
   }
 
   // ================================================== LOGIN =====================================
@@ -104,7 +116,7 @@ class userController {
           },
         });
       } return res.status(401).json({ status: 400, message: 'incorrect password' });
-    } return res.status(404).json({ status: 404, message: 'incorrect email' });
+    } return res.status(404).json({ status: 404, message: 'user with that email doesn\'t exist' });
   }
 }
 export default userController;

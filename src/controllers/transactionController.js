@@ -9,7 +9,6 @@ class transactionController {
   // ========================================= DEBIT ACCOUNT ====================================
   static async debitAccount(req, res) {
     const amount = req.body;
-    console.log(req.params.accountNo);
     const account = await search.searchAccount(req.params.accountNo);
     if (account.rowCount !== 0) {
       if (account.rows[0].balance < amount) {

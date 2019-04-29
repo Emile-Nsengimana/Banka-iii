@@ -1,125 +1,132 @@
 {
-    "swagger": "2.0",
-    "info": {
-      "version": "2",
-      "title": "Banka Application API Endpoints"
-    },
-    "host": "ch-iii.herokuapp.com",
-    "basePath": "/",
-    "securityDefinitions": {
-      "Headers": {
-        "type": "apiKey",
-        "name": "token",
-        "in": "header"
-      }
-    },
-    "schemes": [
-        "https",
-        "http"
-      ],
-      
-      "consumes": [
-        "application/json"
-      ],
-      "produces": [
-        "application/json"
-     ],
-    "definitions": {
-      "signup": {
-        "type": "object",
-        "properties" : {
-          "firstName": {
-              "type": "string"
-          },
-          "lastName": {
-              "type": "string"
-          },
-          "gender": {
-            "type": "string"
-         },
-         "phoneNo": {
-            "type": "string"
+  "swagger": "2.0",
+  "info": {
+    "version": "2",
+    "title": "Banka Application API Endpoints"
+  },
+  "host": "ch-iii.herokuapp.com",
+  "basePath": "/",
+  "securityDefinitions": {
+    "Headers": {
+      "type": "apiKey",
+      "name": "token",
+      "in": "header"
+    }
+  },
+  "schemes": [
+    "https",
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "definitions": {
+    "signup": {
+      "type": "object",
+      "properties": {
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "gender": {
+          "type": "string"
+        },
+        "phoneNo": {
+          "type": "string"
         },
         "email": {
-              "type": "string"
+          "type": "string"
         },
         "password": {
-              "type": "string"
-          },
-        "confirmPassword": {
-              "type": "string"
+          "type": "string"
         },
-        "type":{
-            "type": "string"
+        "confirmPassword": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
         }
+      }
+    },
+    "signin": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
         }
-      },
-      "signin": {
-        "type": "object",
-        "properties" : { 
-          "email": {
-              "type": "string"
-          },
-          "password": {
-              "type": "string"
+      }
+    },
+    "account": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "accountstatus": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        }
+      }
+    },
+    "transaction": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "number"
+        }
+      }
+    },
+    "status": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "paths": {
+    "/api/v2/auth/signup": {
+      "post": {
+        "tags": [
+          "User Sign up"
+        ],
+        "description": "Sign up",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "creating user account",
+            "schema": {
+              "$ref": "#/definitions/signup"
+            }
           }
-        }
-      },
-      "account": {
-        "type": "object",
-        "properties" : {
-          "type": {
-            "type": "string" 
-          }
-        }
-      },
-      "accountstatus": {
-        "type": "object",
-        "properties" : {
-          "status": {
-            "type": "string"
-          }
-        }
-      },
-      "transaction": {
-        "type": "object",
-        "properties" : {
-          "amount": {
-              "type": "number"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "successful signed up",
+            "schema": {
+              "$ref": "#/definitions/signup"
+            }
           }
         }
       }
-    }, 
-    "paths": {
-      "/api/v2/auth/signup": {
-        "post": {
-          "tags": [
-            "User Sign up"
-          ],
-          "description": "Sign up",
-          "parameters": [
-            {
-              "name": "user",
-              "in": "body",
-              "description": "creating user account",
-              "schema": {
-                "$ref": "#/definitions/signup"
-              }
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "201": {
-              "description": "successful signed up",
-              "schema": {
-                "$ref": "#/definitions/signup"
-              }
-            }
-          }
-        }
-      },
+    },
     "/api/v2/auth/signin": {
       "post": {
         "tags": [
@@ -149,7 +156,7 @@
         }
       }
     },
-    "/api/v2/accounts/": {
+    "/api/v2/accounts": {
       "post": {
         "tags": [
           "Accounts"
@@ -157,21 +164,21 @@
         "description": "Create a bank account",
         "parameters": [
           {
-            "name":"token",
+            "name": "token",
             "in": "header",
-            "description" :"Token",
-            "required":true
+            "description": "Token",
+            "required": true
           },
           {
-            "name":"account type",
+            "name": "account type",
             "in": "body",
-            "description" :"Bank Account type(current or savings)",
+            "description": "Bank Account type(current or savings)",
             "schema": {
-                "$ref": "#/definitions/account"
-              }
+              "$ref": "#/definitions/account"
             }
-          ],
-          "produces": [
+          }
+        ],
+        "produces": [
           "application/json"
         ],
         "responses": {
@@ -184,8 +191,7 @@
         }
       }
     },
-    
-    "/api/v2/accounts/{accountNo}": {
+    "/api/v2/account/{accountNo}/": {
       "patch": {
         "tags": [
           "Accounts"
@@ -193,72 +199,67 @@
         "description": "Change account status",
         "parameters": [
           {
-            "name":"accountNo",
+            "name": "accountNo",
             "in": "path",
-            "description" :"account Number",
-            "required":true
+            "description": "account Number",
+            "required": true
           },
           {
-            "name":"token",
-            "in": "header",
-            "description" :"Cashier token",
-            "required":true
-          },
-          {
-            "name":"account status",
+            "name": "token",
             "in": "body",
-            "description" :"Bank Account status(active or dormant)",
+            "description": "Admin token",
+            "required": true
+          },
+          {
+            "name": "account status",
+            "in": "body",
+            "description": "Bank Account status(active or dormant)",
             "schema": {
               "$ref": "#/definitions/status"
             }
           }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Operation Successful",
-              "schema": {
-                "$ref": "#/definitions/status"
-              }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation Successful",
+            "schema": {
+              "$ref": "#/definitions/accountstatus"
             }
           }
         }
-      },
+      }
+    },
     "/api/v2/account/{accountNo}": {
-        "delete": {
-          "tags": [
-            "Accounts"
-          ],
-          "description": "delete account number",
-          "parameters": [
-            {
-                "name":"accountNo",
-                "in": "path",
-                "description" :"The account number to delete",
-                "required":true
-              
-            },
-           
-            {
-                "name":"token",
-                "in": "header",
-                "description" :"The admin/staff token",
-                "required":true
-              
-            }  
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "201": {
-              "description": "Account deleted"
-              
-            }
+      "delete": {
+        "tags": [
+          "Accounts"
+        ],
+        "description": "delete account number",
+        "parameters": [
+          {
+            "name": "accountNo",
+            "in": "path",
+            "description": "The account number to delete",
+            "required": true
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "description": "The admin/staff token",
+            "required": true
           }
-     
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "Account deleted"
+          }
+        }
       }
     },
     "/api/v2/transactions/{accountNo}/debit": {
@@ -269,21 +270,21 @@
         "description": "Debit a Bank Acoount",
         "parameters": [
           {
-            "name":"accountNo",
+            "name": "accountNo",
             "in": "path",
-            "description" :"The account number to debit",
-            "required":true
+            "description": "The account number to debit",
+            "required": true
           },
           {
-            "name":"token",
+            "name": "token",
             "in": "header",
-            "description" :"The cashier token",
-            "required":true
+            "description": "The cashier token",
+            "required": true
           },
           {
-            "name":"Amount",
+            "name": "Amount",
             "in": "body",
-            "description" :"The amount of money to debit",
+            "description": "The amount of money to debit",
             "schema": {
               "$ref": "#/definitions/transaction"
             }
@@ -297,7 +298,7 @@
             "description": "Transaction sucessful",
             "schema": {
               "$ref": "#/definitions/transaction"
-            } 
+            }
           }
         }
       }
@@ -310,21 +311,21 @@
         "description": "Credit a Bank Acoount",
         "parameters": [
           {
-            "name":"accountNo",
+            "name": "accountNo",
             "in": "path",
-            "description" :"The account number to credit",
-            "required":true
+            "description": "The account number to credit",
+            "required": true
           },
           {
-            "name":"token",
+            "name": "token",
             "in": "header",
-            "description" :"The cashier token",
-            "required":true
+            "description": "The cashier token",
+            "required": true
           },
           {
-            "name":"Amount",
+            "name": "Amount",
             "in": "body",
-            "description" :"The amount of money to credit",
+            "description": "The amount of money to credit",
             "schema": {
               "$ref": "#/definitions/transaction"
             }
@@ -351,25 +352,24 @@
         "description": "list all account’s transaction history",
         "parameters": [
           {
-            "name":"accountNo",
+            "name": "accountNo",
             "in": "path",
-            "description" :"Transaction for this account",
-            "required":true,
-            "type":"string"
+            "description": "Transaction for this account",
+            "required": true,
+            "type": "string"
           },
           {
-            "name":"token",
+            "name": "token",
             "in": "header",
-            "description" :"The client/staff token",
-            "required":true
+            "description": "The client/staff token",
+            "required": true
           }
         ],
         "produces": [
           "application/json"
         ],
         "responses": {
-          "200": {
-          }
+          "200": {}
         }
       }
     },
@@ -381,24 +381,23 @@
         "description": "View a specific transaction",
         "parameters": [
           {
-            "name":"transactionId",
+            "name": "transactionId",
             "in": "path",
-            "description" :"View specific transaction history",
-            "required":true 
+            "description": "View specific transaction history",
+            "required": true
           },
           {
-            "name":"token",
+            "name": "token",
             "in": "header",
-            "description" :"The client/staff token",
-            "required":true
-          } 
+            "description": "The client/staff token",
+            "required": true
+          }
         ],
         "produces": [
           "application/json"
         ],
         "responses": {
-          "200": {
-          }
+          "200": {}
         }
       }
     },
@@ -410,17 +409,17 @@
         "description": "View all accounts owned by a specific user",
         "parameters": [
           {
-            "name":"email",
+            "name": "email",
             "in": "path",
-            "description" :"The email address of the client",
-            "required":true 
+            "description": "The email address of the client",
+            "required": true
           },
           {
-            "name":"token",
+            "name": "token",
             "in": "header",
-            "description" :"The admin token",
-            "required":true
-          } 
+            "description": "The admin token",
+            "required": true
+          }
         ],
         "produces": [
           "application/json"
@@ -440,30 +439,27 @@
         "description": "View all accounts owned by a specific user",
         "parameters": [
           {
-            "name":"accountNo",
+            "name": "accountNo",
             "in": "path",
-            "description" :"The Bank account to view",
-            "required":true 
+            "description": "The Bank account to view",
+            "required": true
           },
           {
-            "name":"token",
+            "name": "token",
             "in": "header",
-            "description" :"The client token",
-            "required":true
-          } 
+            "description": "The client token",
+            "required": true
+          }
         ],
         "produces": [
           "application/json"
         ],
         "responses": {
-          "200": {
-            
-          }
+          "200": {}
         }
-     
       }
     },
-    "/api/v2/accounts": {
+    "/api/v2/accounts/": {
       "get": {
         "tags": [
           "Accounts"
@@ -471,57 +467,51 @@
         "description": "View all Bank accounts",
         "parameters": [
           {
-            "name":"token",
+            "name": "token",
             "in": "header",
-            "description" :"The admin token",
-            "required":true
-            
-          } 
-        ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-                "description": "The list of all Bank accounts"
-              
-            }
+            "description": "The admin token",
+            "required": true
           }
-     
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "The list of all Bank accounts"
+          }
+        }
       }
     },
-    "/api/v2/accounts?status=active": {
-        "get": {
-          "tags": [
-            "Accounts"
-          ],
-          "description": "list active accounts",
-          "parameters": [
-            {
-                "name":"status",
-                "in": "query",
-                "description" :"status",
-                "required":true
-              
-            },
-            {
-                "name":"token",
-                "in": "header",
-                "description" :"The admin token",
-                "required":true
-              
-            } 
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-                "description": "{status} all Bank accounts"
-              
-            }
+    "/api/v2/account/?status=active": {
+      "get": {
+        "tags": [
+          "Accounts"
+        ],
+        "description": "list accounts",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "description": "status",
+            "required": true
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "description": "Staff token",
+            "required": true
           }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "{status} all Bank accounts"
+          }
+        }
       }
     }
-    }
   }
+}

@@ -18,45 +18,52 @@ class dataValidations {
       gender: joi.string().valid('male', 'female').required(),
       phoneNo: joi.string().trim().regex(/^[0-9]{10,13}$/).required(),
       email: joi.string().email().required(),
-      password: new PasswordComplexity(complexityOptions),
+      password: new PasswordComplexity(complexityOptions).required(),
       confirmPassword: joi.string().required(),
       isAdmin: joi.boolean(),
     });
     const {
-      firstName, lastName, gender, phoneNo, email, password, confirmPassword,
+      firstName, lastName, gender, phoneNo, email, password, confirmPassword, isAdmin,
     } = req.body;
-    if (!firstName || !lastName || !gender || !email) {
+    if (!gender) {
       return res.status(400).json({
         status: 400,
-        error: 'please you must provide firstName, lastName, gender, email',
+        error: 'gender is required',
       });
     }
-    const sex = gender.toLowerCase().trim();
-    const mail = email.toLowerCase().trim();
     const newUser = userSchema.validate({
-      firstName: firstName.trim(),
-      lastName: lastName.trim(),
-      gender: sex,
+      firstName,
+      lastName,
+      gender,
       phoneNo,
-      email: mail,
+      email,
       password,
       confirmPassword,
+      isAdmin,
     });
     if (newUser.error) {
       if (newUser.error.details[0].type === 'passwordComplexity.base') {
-        throw Error('password length must be 8 with atleast an upper, lower case letter, and a number');
+        return res.status(400).json({
+          status: 400,
+          error: 'password length must be 8 with atleast an upper, lower case letter, and a number',
+        });
       }
       if (newUser.error.details[0].path[0] === 'phoneNo') {
-        throw Error('invalid phone number');
+        return res.status(400).json({
+          status: 400,
+          error: 'invalid phone number',
+        });
       }
-      throw Error(newUser.error.details[0].message.replace('"', ' ').replace('"', ''));
+      return res.status(400).json({
+        status: 400,
+        error: newUser.error.details[0].message.replace('"', ' ').replace('"', ''),
+      });
     }
-    if (!newUser.error) {
-      req.user = newUser.value;
-      next();
-    }
-    return Error;
+
+    req.user = newUser.value;
+    next();
   }
+
 
   static signIn(req, res, next) {
     const loginSchema = joi.object().keys({
@@ -105,7 +112,10 @@ class dataValidations {
     const { status } = req.body;
 
     if (!status) {
-      return res.status(400).json({ status: 401, error: 'account status is required' });
+      return res.status(400).json({
+        status: 401,
+        error: 'account status is required',
+      });
     }
 
     const newAccountSchema = joi.object().keys({
@@ -115,7 +125,10 @@ class dataValidations {
     const newStatus = newAccountSchema.validate({ status: status.toLowerCase().trim() });
 
     if (newStatus.error) {
-      return res.status(400).json({ status: 401, error: newStatus.error.details[0].message.replace('"', ' ').replace('"', '') });
+      return res.status(400).json({
+        status: 401,
+        error: newStatus.error.details[0].message.replace('"', ' ').replace('"', ''),
+      });
     }
 
     req.body = newStatus.value;
