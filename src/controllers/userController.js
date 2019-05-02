@@ -90,8 +90,8 @@ class userController {
           isadmin: addUser.rows[0].isadmin,
         },
       });
-    } return res.status(500).json({
-      status: 500,
+    } return res.status(400).json({
+      status: 400,
       error: 'server error',
     });
   }

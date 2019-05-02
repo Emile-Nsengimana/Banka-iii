@@ -78,8 +78,8 @@ class dataValidations {
     });
 
     if (credentials.error) {
-      return res.status(401).json({
-        status: 401,
+      return res.status(400).json({
+        status: 400,
         error: credentials.error.details[0].message.replace('"', ' ').replace('"', ''),
       });
     }
