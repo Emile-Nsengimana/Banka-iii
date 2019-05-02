@@ -18,7 +18,7 @@ describe('User tests', () => {
       lastName: 'Shema',
       gender: 'male',
       phoneNo: '0701234567',
-      email: 'shema@gmail.com',
+      email: 'shema100@gmail.com',
       password: '@Jam7891qazxsw!',
       confirmPassword: '@Jam7891qazxsw!',
       type: 'client',
