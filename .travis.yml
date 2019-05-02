@@ -12,4 +12,5 @@ addons:
   postgresql: "9.6"
 
   before_script:
+  - DROP DATABASE IF EXISTS banka
   - psql -c 'create database banka;' -U postgres
