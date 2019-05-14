@@ -108,7 +108,7 @@ class userController {
           data: {
             token: jwtoken,
             userId: findUser.rows[0].userid,
-            firstName: findUser.rows[0].firstName,
+            firstName: findUser.rows[0].firstname,
             lastName: findUser.rows[0].lastname,
             email: findUser.rows[0].email,
             type: findUser.rows[0].type,
