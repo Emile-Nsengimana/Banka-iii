@@ -1,10 +1,14 @@
 /* eslint-disable no-undef */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
+import dotenv from 'dotenv';
 import server from '../server';
 
+dotenv.config();
 chai.use(chaiHttp);
 chai.should();
+
+let accountNum;
 
 describe('User tests', () => {
   // ========================================== SIGNUP =========================
@@ -14,7 +18,7 @@ describe('User tests', () => {
       lastName: 'Shema',
       gender: 'male',
       phoneNo: '0701234567',
-      email: 'shema@gmail.com',
+      email: 'shema100@gmail.com',
       password: '@Jam7891qazxsw!',
       confirmPassword: '@Jam7891qazxsw!',
       type: 'client',
@@ -85,7 +89,6 @@ describe('User tests', () => {
 
   it('should not be able to signup with a weak password', (done) => {
     const user3 = {
-      id: 1,
       firstName: 'James',
       lastName: 'Shema',
       gender: 'male',
@@ -122,11 +125,67 @@ describe('User tests', () => {
       .post('/api/v2/auth/signup')
       .send(user5)
       .end((err, res) => {
-        res.body.status.should.be.equal(401);
+        res.body.status.should.be.equal(400);
         res.body.error.should.be.a('string');
       });
     done();
   });
+});
+describe('Account tests', () => {
+  // ------------------------------------------- SIGN IN -------------------------
+  it('shoult first sign in', (done) => {
+    const userLogin = {
+      email: 'staff@gmail.com',
+      password: 'open',
+    };
+    chai.request(server)
+      .post('/api/v2/auth/signin')
+      .send(userLogin)
+      .end((err, res) => {
+        res.body.status.should.be.equal(200);
+      });
+    done();
+  });
 
-  // ========================================== LOGIN ==========================
+  // ------------------------------------------- CREATE AN ACCOUNT -------------------------
+  it('should be able to create an account', (done) => {
+    const account = {
+      type: 'savings',
+    };
+    chai.request(server)
+      .post('/api/v2/accounts/')
+      .send(account)
+      .set('token', process.env.staffToken)
+      .end((err, res) => {
+        res.body.status.should.be.equal(201);
+        accountNum = req.body.data.accountNumber;
+      });
+    done();
+  });
+
+  // ------------------------------------------- CHANGE STATUS -------------------------
+  it('should not be able to change account status', (done) => {
+    const accountStatus = {
+      status: 'active',
+    };
+    chai.request(server)
+      .patch(`/api/v2/account/${accountNum}`)
+      .send(accountStatus)
+      .set('token', process.env.staffToken)
+      .end((err, res) => {
+        res.body.status.should.be.equal(401);
+      });
+    done();
+  });
+  // ------------------------------------------- GET ACCOUNTS -------------------------
+  it('should display all accounts', (done) => {
+    chai.request(server)
+      .get('/api/v2/accounts/')
+      .set('token', process.env.adminToken)
+      .end((err, res) => {
+        res.body.status.should.be.equal(200);
+        res.body.should.be.a('object');
+      });
+    done();
+  });
 });

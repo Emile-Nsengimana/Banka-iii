@@ -18,7 +18,7 @@ class checkUser {
   static async isStaff(req, res, next) {
     const userFund = await con.query(user.searchUserById, [req.user.id]);
     if (userFund.rowCount === 0) {
-      return res.status(401).json({ status: 401, error: 'please login or signup' });
+      return res.status(404).json({ status: 401, error: 'please login or signup' });
     }
     if (userFund.rows[0].type !== 'staff') {
       return res.status(403).json({ status: 403, error: 'permission denied' });

@@ -16,7 +16,6 @@ describe('Validation tests', () => {
       email: 'shema@gmail.com',
       password: '@Jam7891qazxsw!',
       confirmPassword: '@Jam7891qazxsw!',
-      type: 'client',
     };
 
     chai.request(server)
@@ -37,7 +36,6 @@ describe('Validation tests', () => {
       phoneNo: '0701234567',
       password: '@Jam7891qazxsw!',
       confirmPassword: '@Jam7891qazxsw!',
-      type: 'client',
     };
 
     chai.request(server)
@@ -48,8 +46,48 @@ describe('Validation tests', () => {
       });
     done();
   });
+  // ---------------------------------- VALIDATION TEST -----------------------------------------
+  it('should not signup with invalid last name', (done) => {
+    const user = {
+      firstName: 'James',
+      lastName: 'S.',
+      email: 'newmail@gmail.com',
+      gender: 'male',
+      phoneNo: '0701234567',
+      password: '@Jam7891qazxsw!',
+      confirmPassword: '@Jam7891qazxsw!',
+    };
 
-  // -------------------------------------------------------------------------------
+    chai.request(server)
+      .post('/api/v2/auth/signup')
+      .send(user)
+      .end((err, res) => {
+        res.body.status.should.be.equal(400);
+      });
+    done();
+  });
+  // ---------------------------------- PHONE VALIDATION TEST -----------------------
+  it('should signup with an invalid phone number', (done) => {
+    const user = {
+      firstName: 'James',
+      lastName: 'Shema',
+      gender: 'male',
+      phoneNo: '0701234WWWWW',
+      password: '@Jam7891qazxsw!',
+      confirmPassword: '@Jam7891qazxsw!',
+    };
+
+    chai.request(server)
+      .post('/api/v2/auth/signup')
+      .send(user)
+      .end((err, res) => {
+        res.body.status.should.be.equal(400);
+        res.body.error.should.be.a('string');
+      });
+    done();
+  });
+
+  // ----------------------------------- PASSWORD VALIDATION TEST -------------------------
   it('should require user type', (done) => {
     const user = {
       firstName: 'James',
@@ -57,8 +95,8 @@ describe('Validation tests', () => {
       gender: 'male',
       email: 'this@gmail.com',
       phoneNo: '0701234567',
-      password: '@Jam7891qazxsw!',
-      confirmPassword: '@Jam7891qazxsw!',
+      password: 'new',
+      confirmPassword: 'new',
     };
 
     chai.request(server)
@@ -81,7 +119,7 @@ describe('Validation tests', () => {
       .post('/api/v2/auth/signin')
       .send(user)
       .end((err, res) => {
-        res.body.status.should.be.equal(401);
+        res.body.status.should.be.equal(400);
       });
     done();
   });

@@ -20,10 +20,10 @@ route.post('/api/v2/auth/signin', schema.signIn, userControl.login);
 // ------------------------------------------- ACCOUNT ------------------------------
 route.post('/api/v2/accounts/', auth, schema.validateCreateAccount, accountControl.createAccount);
 route.patch('/api/v2/account/:accountNo', auth, checkUser.isAdmin, schema.validateChangeStatus, accountControl.changeAccountStatus);
-route.get('/api/v2/accounts', auth, checkUser.isStaff, accountControl.displayAccounts);
+route.get('/api/v2/accounts', accountControl.displayAccounts);
 route.get('/api/v2/accounts/:accountNo', auth, checkUser.isOwner, accountControl.searchAccount);
 route.delete('/api/v2/account/:accountNo', auth, checkUser.isStaff, accountControl.deleteAccount);
-route.get('/api/v2/accounts/', auth, checkUser.isStaff, accountControl.getAccountsByStatus);
+route.get('/api/v2/account/', auth, checkUser.isStaff, accountControl.getAccountsByStatus);
 route.get('/api/v2/user/:email/accounts/', auth, checkUser.isAllowed, accountControl.getUserAccounts);
 
 // ------------------------------------------- TRANSACTION --------------------------
