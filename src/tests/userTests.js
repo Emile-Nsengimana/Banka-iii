@@ -3,17 +3,33 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import dotenv from 'dotenv';
 import server from '../server';
+import jwt from '../helpers/tokenGenerator';
 
 dotenv.config();
 chai.use(chaiHttp);
 chai.should();
+const adminPayload = {
+  userid: 1,
+  email: 'admin@gmail.com',
+  isadmin: true,
+  type: 'staff',
+};
 
-let accountNum;
+const adminToken = jwt.signToken(adminPayload);
 
 describe('User tests', () => {
-  // ========================================== SIGNUP =========================
+  it('should display a summary of endpoints', (done) => {
+    chai.request(server)
+      .get('/')
+      .end((err, res) => {
+        res.body.should.be.a('object');
+      });
+    done();
+  });
+
+  // Signup test
   it('should be able to signup', (done) => {
-    const user0 = {
+    const user = {
       firstName: 'James',
       lastName: 'Shema',
       gender: 'male',
@@ -25,7 +41,7 @@ describe('User tests', () => {
     };
     chai.request(server)
       .post('/api/v2/auth/signup')
-      .send(user0)
+      .send(user)
       .end((err, res) => {
         res.body.status.should.be.equal(201);
         res.body.should.be.an('object');
@@ -39,14 +55,13 @@ describe('User tests', () => {
     done();
   });
 
-  // ------------------------------------------------------------------------------------------
   it('should not be able to signup twice with the same email', (done) => {
     const user1 = {
-      firstName: 'James',
-      lastName: 'Shema',
+      firstName: 'Emile',
+      lastName: 'Nsengimana',
       gender: 'male',
-      phoneNo: '0701234567',
-      email: 'shema@gmail.com',
+      phoneNo: '0782057791',
+      email: 'admin@gmail.com',
       password: '@Jam7891qazxsw!',
       confirmPassword: '@Jam7891qazxsw!',
       type: 'client',
@@ -55,14 +70,14 @@ describe('User tests', () => {
       .post('/api/v2/auth/signup')
       .send(user1)
       .end((err, res) => {
-        res.body.status.should.be.equal(400);
+        res.body.status.should.be.equal(409);
         res.body.should.be.an('object');
         res.body.error.should.be.a('string');
       });
     done();
   });
 
-  // ------------------------------------------------------------------------------------------
+  // User password test
   it('should not be able to signup without re-typing the password correctly', (done) => {
     const user2 = {
       firstName: 'James',
@@ -71,7 +86,7 @@ describe('User tests', () => {
       phoneNo: '0701234567',
       email: 'abc@gmail.com',
       password: '@Jam7891qazxsw!m',
-      confirmPassword: '@Jam7891qazxsw!',
+      confirmPassword: 'aaaaaaaaaaaaaa',
       type: 'client',
     };
     chai.request(server)
@@ -84,8 +99,6 @@ describe('User tests', () => {
       });
     done();
   });
-
-  // ------------------------------------------------------------------------------------------
 
   it('should not be able to signup with a weak password', (done) => {
     const user3 = {
@@ -109,7 +122,6 @@ describe('User tests', () => {
     done();
   });
 
-  // ------------------------------------------------------------------------------------------
   it('should not be able to signup without providing all required info', (done) => {
     const user5 = {
       firstName: 'a',
@@ -130,61 +142,172 @@ describe('User tests', () => {
       });
     done();
   });
-});
-describe('Account tests', () => {
-  // ------------------------------------------- SIGN IN -------------------------
-  it('shoult first sign in', (done) => {
-    const userLogin = {
-      email: 'staff@gmail.com',
+
+  // Admin actions on user
+  it('should be able to create a staff member', (done) => {
+    const staff = {
+      firstName: 'Staff',
+      lastName: 'Member',
+      gender: 'male',
+      phoneNo: '0701234567',
+      email: 'staffmember@gmail.com',
+      password: '@Jam7891qazxsw!',
+      confirmPassword: '@Jam7891qazxsw!',
+      type: 'staff',
+    };
+    chai.request(server)
+      .post('/api/v2/auth/staff/signup')
+      .set('token', adminToken)
+      .send(staff)
+      .end((err, res) => {
+        res.body.status.should.be.equal(201);
+        res.body.should.be.an('object');
+        res.body.data.should.have.property('token');
+        res.body.data.should.have.property('firstname');
+        res.body.data.should.have.property('lastname');
+        res.body.data.should.have.property('email');
+        res.body.data.should.have.property('type');
+        res.body.data.should.have.property('isadmin');
+      });
+    done();
+  });
+
+
+  it('should not be able to signup without re-typing the password correctly', (done) => {
+    const user2 = {
+      firstName: 'James',
+      lastName: 'Shema',
+      gender: 'male',
+      phoneNo: '0701234567',
+      email: 'abc@gmail.com',
+      password: '@Jam7891qazxsw!m',
+      confirmPassword: 'aaaaaaaaaaaaaa',
+      type: 'client',
+    };
+    chai.request(server)
+      .post('/api/v2/auth/staff/signup')
+      .set('token', adminToken)
+      .send(user2)
+      .end((err, res) => {
+        res.body.status.should.be.equal(400);
+        res.body.should.be.an('object');
+        res.body.error.should.be.a('string');
+      });
+    done();
+  });
+
+  it('should not be able to signup with a weak password', (done) => {
+    const user3 = {
+      firstName: 'James',
+      lastName: 'Shema',
+      gender: 'male',
+      phoneNo: '0701234567',
+      email: 'abc@gmail.com',
+      password: 'qwerty',
+      confirmPassword: 'qwerty',
+      type: 'client',
+    };
+    chai.request(server)
+      .post('/api/v2/auth/staff/signup')
+      .set('token', adminToken)
+      .send(user3)
+      .end((err, res) => {
+        res.body.status.should.be.equal(400);
+        res.body.should.be.an('object');
+        res.body.error.should.be.a('string');
+      });
+    done();
+  });
+
+  it('should not be able to signup without providing all required info', (done) => {
+    const user5 = {
+      firstName: 'a',
+      lastName: 'a',
+      gender: 'male',
+      phoneNo: '0701234567',
+      email: 'abcd@gmail.com',
+      password: '@Jam7891qazxsw@',
+      confirmPassword: '@Jam7891qazxsw@',
+      type: 'client',
+    };
+    chai.request(server)
+      .post('/api/v2/auth/staff/signup')
+      .set('token', adminToken)
+      .send(user5)
+      .end((err, res) => {
+        res.body.status.should.be.equal(400);
+        res.body.error.should.be.a('string');
+      });
+    done();
+  });
+
+  it('should not be able to signup twice with the same email', (done) => {
+    const user1 = {
+      firstName: 'Emile',
+      lastName: 'Nsengimana',
+      gender: 'male',
+      phoneNo: '0782057791',
+      email: 'admin@gmail.com',
+      password: '@Jam7891qazxsw!',
+      confirmPassword: '@Jam7891qazxsw!',
+      type: 'client',
+    };
+    chai.request(server)
+      .post('/api/v2/auth/staff/signup')
+      .set('token', adminToken)
+      .send(user1)
+      .end((err, res) => {
+        res.body.status.should.be.equal(409);
+        res.body.should.be.an('object');
+        res.body.error.should.be.a('string');
+      });
+    done();
+  });
+
+  it('should signin a user', (done) => {
+    const user1 = {
+      email: 'admin@gmail.com',
       password: 'open',
     };
     chai.request(server)
       .post('/api/v2/auth/signin')
-      .send(userLogin)
+      .send(user1)
       .end((err, res) => {
-        res.body.status.should.be.equal(200);
+        res.status.should.be.equal(200);
+        res.body.should.be.an('object');
+        res.body.data.should.have.property('firstName');
+        res.body.data.should.have.property('firstName');
+        res.body.data.should.have.property('email');
       });
     done();
   });
 
-  // ------------------------------------------- CREATE AN ACCOUNT -------------------------
-  it('should be able to create an account', (done) => {
-    const account = {
-      type: 'savings',
+  it('should not signin a user with incorrect password', (done) => {
+    const user1 = {
+      email: 'admin@gmail.com',
+      password: 'open1',
     };
     chai.request(server)
-      .post('/api/v2/accounts/')
-      .send(account)
-      .set('token', process.env.staffToken)
+      .post('/api/v2/auth/signin')
+      .send(user1)
       .end((err, res) => {
-        res.body.status.should.be.equal(201);
-        accountNum = req.body.data.accountNumber;
+        res.status.should.be.equal(401);
+        res.body.message.should.be.a('string');
       });
     done();
   });
 
-  // ------------------------------------------- CHANGE STATUS -------------------------
-  it('should not be able to change account status', (done) => {
-    const accountStatus = {
-      status: 'active',
+  it('should not signin unexisting user ', (done) => {
+    const user1 = {
+      email: 'notexist@gmail.com',
+      password: 'open',
     };
     chai.request(server)
-      .patch(`/api/v2/account/${accountNum}`)
-      .send(accountStatus)
-      .set('token', process.env.staffToken)
+      .post('/api/v2/auth/signin')
+      .send(user1)
       .end((err, res) => {
-        res.body.status.should.be.equal(401);
-      });
-    done();
-  });
-  // ------------------------------------------- GET ACCOUNTS -------------------------
-  it('should display all accounts', (done) => {
-    chai.request(server)
-      .get('/api/v2/accounts/')
-      .set('token', process.env.adminToken)
-      .end((err, res) => {
-        res.body.status.should.be.equal(200);
-        res.body.should.be.a('object');
+        res.status.should.be.equal(404);
+        res.body.message.should.be.a('string');
       });
     done();
   });

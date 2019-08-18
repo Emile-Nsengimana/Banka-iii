@@ -64,30 +64,6 @@ class dataValidations {
     next();
   }
 
-
-  static signIn(req, res, next) {
-    const loginSchema = joi.object().keys({
-      email: joi.string().email().required(),
-      password: joi.string().required(),
-    });
-
-    const { email, password } = req.body;
-    const credentials = loginSchema.validate({
-      email: email.trim(),
-      password,
-    });
-
-    if (credentials.error) {
-      return res.status(400).json({
-        status: 400,
-        error: credentials.error.details[0].message.replace('"', ' ').replace('"', ''),
-      });
-    }
-
-    req.user = credentials.value;
-    next();
-  }
-
   static validateCreateAccount(req, res, next) {
     const { type } = req.body;
     if (!type) {

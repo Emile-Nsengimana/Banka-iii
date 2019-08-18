@@ -1,0 +1,8 @@
+{
+  "exclude": [
+    "src/tests",
+    "src/controllers/transactionController.js",
+    "src/controllers/accountController.js",
+    "src/helpers/"
+  ]
+}
