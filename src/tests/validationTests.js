@@ -107,22 +107,4 @@ describe('Validation tests', () => {
       });
     done();
   });
-
-  // -------------------------------------------------------------------------------
-  it('should not be able to signin without email', (done) => {
-    const user = {
-      email: '',
-      password: '@Jam7891qazxsw!',
-    };
-
-    chai.request(server)
-      .post('/api/v2/auth/signin')
-      .send(user)
-      .end((err, res) => {
-        res.body.status.should.be.equal(400);
-      });
-    done();
-  });
-
-  // -------------------------------------------------------------------------------
 });
