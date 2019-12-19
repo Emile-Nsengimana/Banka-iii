@@ -7,6 +7,7 @@ import checkUser from '../helpers/checkUser';
 import transactionControl from '../controllers/transactionController';
 import schema from '../helpers/validations';
 import swaggerDoc from '../../swagger.json';
+import notifications from '../controllers/notifications';
 
 const route = express.Router();
 route.get('/', userControl.welcome);
@@ -32,5 +33,10 @@ route.post('/api/v2/transactions/:accountNo/credit', auth, checkUser.isCashier, 
 route.get('/api/v2/accounts/:accountNo/transactions', auth, checkUser.isOwner, transactionControl.getAccountsTransactions);
 route.get('/api/v2/transactions/:transactionId', auth, checkUser.isCashier, transactionControl.getTransaction);
 route.get('/api/v2/transactions', auth, transactionControl.getUserTransactions);
+
+// ------------------------------------------- TRANSACTION --------------------------
+route.post('/notifications', notifications.registerNotifications);
+route.get('/notifications', notifications.getNotifications);
+
 
 export default route;
