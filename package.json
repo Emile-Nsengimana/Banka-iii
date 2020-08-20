@@ -30,7 +30,7 @@
     "@babel/polyfill": "^7.4.3",
     "@babel/preset-env": "^7.4.2",
     "@babel/register": "^7.4.0",
-    "bcrypt": "^3.0.6",
+    "bcrypt": "^5.0.0",
     "chai": "^4.2.0",
     "chai-http": "^4.2.1",
     "cors": "^2.8.5",
