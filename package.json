@@ -48,7 +48,7 @@
     "uuid": "^3.3.2"
   },
   "devDependencies": {
-    "mocha": "^6.1.4",
+    "mocha": "^10.2.0",
     "nodemon": "^1.18.11",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
